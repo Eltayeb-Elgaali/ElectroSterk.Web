@@ -1,4 +1,4 @@
-﻿table-sort  {
+﻿table.table-sort tr:not(.home) {
     cursor: pointer;
 }
 
@@ -13,4 +13,12 @@
 
 span.ajax-photo {
     display: none;
+}
+
+table.table-sort.categories td {
+    padding: 20px;
+}
+
+.msg-category-change {
+    position: absolute; 
 }

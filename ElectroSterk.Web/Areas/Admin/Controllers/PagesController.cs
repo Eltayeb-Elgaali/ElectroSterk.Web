@@ -19,6 +19,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult AadPage(Page model)
         {
@@ -96,8 +97,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
 
         public ActionResult DeletePage(int id)
         {
-            var page = Pages.Get(id);
-            Pages.Delete(page);
+            Pages.Delete(Pages.Get(id));
             return RedirectToAction("Index");
         }
 

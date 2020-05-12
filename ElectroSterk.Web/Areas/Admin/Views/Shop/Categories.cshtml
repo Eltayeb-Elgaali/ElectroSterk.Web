@@ -22,7 +22,7 @@
 }
 else
 {
-    <table class="table table-sort" id="pages">
+    <table class="table table-sort categories" id="pages">
         <tr class="home">
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -33,9 +33,10 @@ else
   
         @foreach (var item in Model)
         {
-            <tr>
+            <tr id="id_@item.Id">
                 <td>
-                    @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    <div class="msg-category-change"></div>
+                    @Html.EditorFor(modelItem => item.Name, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
                 </td>
 
                 <td>
@@ -84,7 +85,6 @@ else
                 $.post(url,
                     { catName: catName },
                     function (data) {
-
                         var response = data.trim();
 
                         if (response == "titletaken") {
@@ -123,23 +123,78 @@ else
                     });
             });
             //------------------------------
-            $("a.delete").click(function () {
+            $("body").on("click", "a.delete", function () {
                 if (!confirm("Are you sure you want to delete this page")) return false;
             });
 
+            //-------------------------------
             $("table#pages tbody").sortable({
                 items: "tr:not(.home)",
                 placeholder: "ui-state-highlight",
                 update: function () {
                     var ids = $("table#pages tbody").sortable("serialize");
 
-                    var url = "Admin/Pages/ReorderPages";
+                    var url = "ReorderCategories";
                     //ajax call
                     $.post(url, ids, function (data) {
                     });
                 }
 
             });
+
+            //----------------------
+            var textBox;
+
+            $("table#pages input.text-box").dblclick(function() {
+                textBox = $(this).val();
+                $(this).attr("readonly", false);
+            });
+
+            $("table#pages input.text-box").keyup(function(e) {
+                if (e.keyCode == 13) {
+                    $(this).blur();
+                }
+            });
+
+            $("table#pages input.text-box").blur(function() {
+                var $this = $(this);
+                 
+                var msgCategoryChange = $this.parent().find(".msg-category-change");
+                var newCategoryName = $this.val();
+
+                var id = $this.parent().parent().attr("id").substring(3);
+                var url = "EditCategory";
+
+                if (newCategoryName.length < 2) {
+                    alert("Category name must be at least 2 charachters long.");
+                    $this.attr("readonly", false);
+                    return false;
+                }
+
+                $.post(url,
+                    { newCategoryName: newCategoryName, id: id },
+                    function(data) {
+                        var response = data.trim();
+
+                        if (response == "titleused") {
+                            $this.val(textBox);
+                            msgCategoryChange.html("<span class='alert alert-danger'>That title is taken!</span>").show();
+                        } else {
+                            msgCategoryChange.html("<span class='alert alert-success'>The category has been changed</span>").show();
+                        }
+                        
+                        setTimeout(function() {
+                                msgCategoryChange.fadeOut("fast",
+                                    function() {
+                                        msgCategoryChange.html("");
+                                    });
+                            },
+                            2000);
+                    }).done(function() {
+                    $this.attr("readonly", true);
+                });
+            });
+
         });
 
     </script>

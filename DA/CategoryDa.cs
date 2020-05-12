@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,41 @@ namespace DA
             }
 
             return id;
+        }
+
+
+        public static Category GetCategory(int id)
+        {
+            using (var db = new ElectroSterkDbContext())
+            {
+                return db.Categories.FirstOrDefault(x => x.Id == id);
+
+            }
+        }
+
+
+        public static void DeleteCategory(Category category)
+        {
+            using (var db = new ElectroSterkDbContext())
+            {
+                db.Entry(category).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
+        }
+
+        public static string UpdateCategory(string name, int id)
+        {
+            using (var db = new ElectroSterkDbContext())
+            {
+                if (db.Categories.Any(x => x.Name == name)) return "titleused";
+
+                var category = db.Categories.FirstOrDefault(x=>x.Id == id);
+
+                category.Name = name;
+                db.SaveChanges();
+            }
+
+            return "done";
         }
     }
 }

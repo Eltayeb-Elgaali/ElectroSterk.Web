@@ -19,5 +19,29 @@ namespace BLL
         {
             return CategoryDa.AddCategory(name);
         }
+
+
+        public static Category GetCategoryWithId(int id)
+        {
+            if (id > 0)      //resharper make it shorter
+            {
+                return CategoryDa.GetCategory(id); //to not consume memory dont use var
+            }
+
+            return new Category();
+        }
+
+        public static void Delete(Category category)
+        {
+            if (!string.IsNullOrEmpty(category.Name))
+            {
+                CategoryDa.DeleteCategory(category);
+            }
+        }
+
+        public static string Update(string name, int id)
+        {
+            return CategoryDa.UpdateCategory(name, id);
+        }
     }
 }
