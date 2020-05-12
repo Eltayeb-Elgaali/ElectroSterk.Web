@@ -1,0 +1,16 @@
+﻿table-sort  {
+    cursor: pointer;
+}
+
+.ui-state-highlight {
+    border: 1px dashed  #4F282D;
+}
+
+.div.new-category {
+    margin-top: 30px;
+    position: relative;
+}
+
+span.ajax-photo {
+    display: none;
+}

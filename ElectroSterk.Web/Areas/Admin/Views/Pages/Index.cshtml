@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Entities.Page>
+
+@{
+    ViewBag.Title = "Pages";
+}
+
+<h2>Pages</h2>
+
+<p>
+    @Html.ActionLink("Nieuwe pagina toevoegen", "AadPage")
+</p>
+
+@if (!Model.Any())
+{
+    <h1 class="text-center">There are no pages</h1>
+}
+else
+{
+
+    <table class="table table-sort" id="pages">
+        <tr class="home">
+            <th>
+                Title
+            </th>
+
+            <th>
+                Sorting
+            </th>
+            <th>
+                HasSidbar
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="@item.Id" class="@item.Title">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sorting)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasSidbar)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditPage", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "PageDetails", new { id = item.Id }) |
+                    @if (item.Title != "home")
+                    {
+                        @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new { @class = "delete" })
+                    }
+
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@section Scripts {
+
+    
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+
+    <script>
+
+        $(function () {
+            /**
+             * confirm page deletion
+             */
+            $("a.delete").click(function () {
+                if (!confirm("Are you sure you want to delete this page")) return false;
+         });
+
+            $("table#pages tbody").sortable({
+                items: "tr:not(.home)",
+                placeholder: "ui-state-highlight",
+                update: function() {
+                    var ids = $("table#pages tbody").sortable("serialize");
+                    //console.log(ids);
+                    var url = "Admin/Pages/ReorderPages";
+                    //ajax call
+                    $.post(url, ids, function(data) {
+                    });
+                }
+
+            });
+        });
+                ////////////////////////////////////////////////////////////
+    </script>
+}
