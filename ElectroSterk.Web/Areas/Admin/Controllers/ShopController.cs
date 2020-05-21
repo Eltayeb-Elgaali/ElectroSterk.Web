@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using BLL;
 using DA;
 using Entities;
+using PagedList;
 
 namespace ElectroSterk.Web.Areas.Admin.Controllers
 {
@@ -60,6 +61,8 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
         {
             return CategoriesBll.Update(newCategoryName, id);
         }
+
+        
 
         public ActionResult AddProduct()
         {
@@ -165,6 +168,22 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
             }
 
             return RedirectToAction("AddProduct");
+        }
+
+        public ActionResult Products(int? page, int? catId)
+        {
+            var products = ProductsBll.ListProducts(catId);
+            var pageNumber = page ?? 1;
+            
+
+            ViewBag.Categories = ProductsBll.CategoriesVb();
+
+            ViewBag.SelectedCat = catId.ToString();
+
+             
+            var onePageOfProducts = products.ToPagedList(pageNumber, 3);
+            ViewBag.OnePageOfProducts = onePageOfProducts;
+            return View(products);
         }
     }
 }

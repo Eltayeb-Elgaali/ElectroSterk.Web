@@ -55,5 +55,26 @@ namespace DA
         //        }
         //    }
         }
+
+        public static List<Product> GetProducts(int? catId)
+        {
+            using (var db = new ElectroSterkDbContext())
+            {
+                return db.Products.ToArray()
+                    .Where(x => catId == null || catId == 0 || x.CategoryId == catId)
+                    .ToList();
+            }
+        }
+
+        public static SelectList CategoriesViewBag()
+        {
+            using (var db = new ElectroSterkDbContext())
+            {
+                
+                
+                return new SelectList(db.Categories.ToList(),"Id", "Name");
+               
+            }
+        }
     }
 }
