@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -76,5 +78,58 @@ namespace DA
                
             }
         }
+
+
+        public static Product UpdateProduct(int id)
+        {
+            Product product;
+            using (var db = new ElectroSterkDbContext())
+            {
+                product = db.Products.Find(id);
+                if(product != null)
+                {
+                    product.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                }
+                
+            }
+
+            return product;
+        }
+
+
+        public static void UpdateProductExecute(Product model, int id)
+        {
+            Product product;
+            using (var db = new ElectroSterkDbContext())
+            {
+                product = db.Products.Find(id);
+
+
+                product.Name = model.Name;
+                product.Description = model.Description;
+                product.Price = model.Price;
+                product.CategoryId = model.CategoryId;
+                product.ImageName = model.ImageName;
+
+                Category category = db.Categories.FirstOrDefault(x => x.Id == model.CategoryId);
+                product.CategoryName = category.Name;
+                db.SaveChanges();
+            }
+        }
+
+        public static void DeleteProduct(int id)
+        {
+            using (var db = new ElectroSterkDbContext())
+            {
+                var product = db.Products.Find(id);
+                if (product != null)
+                {
+                    db.Products.Remove(product);
+                    db.SaveChanges();
+                }
+                
+            }
+        }
+
     }
 }

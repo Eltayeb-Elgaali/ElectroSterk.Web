@@ -185,5 +185,166 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
             ViewBag.OnePageOfProducts = onePageOfProducts;
             return View(products);
         }
+
+        public ActionResult EditProduct(int id)
+        {
+            var product = ProductsBll.Update(id);
+            if (product == null)
+            {
+                return Content("The product does not exist");
+            }
+
+            product.GalleryImages =
+                Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
+                    .Select(x => Path.GetFileName(x));
+            return View(product);
+        }
+
+
+        [HttpPost]
+        public ActionResult EditProduct(Product product, HttpPostedFileBase ProductPic)
+        {
+
+            int id = product.Id;
+            using (var db = new ElectroSterkDbContext())
+            {
+                product.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+            }
+            product.GalleryImages =
+                Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
+                    .Select(x => Path.GetFileName(x));
+            if (!ModelState.IsValid)
+            {
+                return View(product);
+            }
+
+            using (var db = new ElectroSterkDbContext())
+            {
+                if (db.Products.Where(x => x.Id != id).Any(x => x.Name == product.Name))
+                {
+                    ModelState.AddModelError("", "That product name is taken");
+                    return View(product);
+                }
+            }
+
+
+            ProductsBll.UpdateProductExecute(product,id);
+
+            TempData["SM"] = "You have edited the product!";
+
+            // update image and delete files
+            if (ProductPic != null && ProductPic.ContentLength > 0)
+            {
+                string ext = ProductPic.ContentType.ToLower();
+
+                if (ext != "image/jpg" &&
+                    ext != "image/jpeg" &&
+                    ext != "image/gif" &&
+                    ext != "image/jpeg" &&
+                    ext != "image/x-png" &&
+                    ext != "image/png")
+                {
+                    using (var db = new ElectroSterkDbContext())
+                    {
+                        ModelState.AddModelError("", "Invalid Image!");
+                        return View(product);
+
+                    }
+                }
+
+                var mainDir = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
+
+                
+                var tempPath1 = Path.Combine(mainDir.ToString(), "Products\\" + id.ToString());
+                var tempPath2  = Path.Combine(mainDir.ToString(), "Products\\" + id.ToString() + "\\Thumbs");
+
+                DirectoryInfo directory1 = new DirectoryInfo(tempPath1);
+                DirectoryInfo directory2 = new DirectoryInfo(tempPath2);
+
+                foreach (FileInfo file2 in directory1.GetFiles())
+                {
+                    file2.Delete();
+                }
+
+                foreach (FileInfo file3 in directory2.GetFiles())
+                {
+                    file3.Delete();
+                }
+
+                string imageName = ProductPic.FileName;
+                using (var db = new ElectroSterkDbContext())
+                {
+                    Product prod = db.Products.Find(id);
+                    if (prod != null)
+                    {
+                        prod.ImageName = imageName;
+                        db.SaveChanges();
+                    }
+                     
+                }
+
+                var path = string.Format("{0}\\{1}", tempPath1, imageName);
+                var path1 = string.Format("{0}\\{1}", tempPath2, imageName);
+
+                ProductPic.SaveAs(path);
+
+                WebImage img = new WebImage(ProductPic.InputStream);
+                img.Resize(200, 200);
+                img.Save(path1);
+            }
+
+            return RedirectToAction("EditProduct");
+        }
+
+        public ActionResult DeleteProduct(int id)       
+        {
+            ProductsBll.Delete(id);
+            var baseDirectory = new DirectoryInfo(string.Format("{0}Images\\Uplaoads",Server.MapPath(@"\")));
+            string tempPath = Path.Combine(baseDirectory.ToString(), "Products\\" + id.ToString());
+
+            if(Directory.Exists((tempPath)))
+                Directory.Delete(tempPath, true);
+
+            return RedirectToAction("Products");
+        }
+
+        [HttpPost]
+        public void SaveGalleryImages(int id)
+        {
+            foreach (string fileName in Request.Files)
+            {
+                HttpPostedFileBase file = Request.Files[fileName];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    var baseDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
+                    string tempPath1 = Path.Combine(baseDirectory.ToString(),
+                        "Products\\" + id.ToString() + "\\Gallery");
+                    string tempPath2 = Path.Combine(baseDirectory.ToString(),
+                        "Products\\" + id.ToString() + "\\Gallery\\Thumbs");
+
+                    var path = string.Format("{0}\\{1}", tempPath1, file.FileName);
+                    var path2 = string.Format("{0}\\{1}", tempPath2, file.FileName);
+
+                    file.SaveAs(path);
+                    WebImage img = new WebImage(file.InputStream);
+                    img.Resize(200, 200);
+                    img.Save(path2);
+
+                }
+            }
+        }
+
+        public void DeleteImage(int id, string imageName)
+        {
+            string path1 = Request.MapPath("~/Images/Uploads/Products" + id.ToString() + "/Gallery/" + imageName);
+            string path2 = Request.MapPath("~/Images/Uploads/Products" + id.ToString() + "/Gallery/Thumbs/" + imageName);
+
+            if(System.IO.File.Exists(path1))
+                System.IO.File.Delete(path1);
+
+            if (System.IO.File.Exists(path2))
+                System.IO.File.Delete(path2);
+        }
     }
 }

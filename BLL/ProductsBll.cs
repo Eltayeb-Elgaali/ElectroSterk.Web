@@ -30,5 +30,21 @@ namespace BLL
         {
             return ProductDa.CategoriesViewBag();
         }
+
+
+        public static Product Update(int id)
+        {
+            return ProductDa.UpdateProduct(id);
+        }
+
+        public static void UpdateProductExecute(Product model, int id)
+        {
+            ProductDa.UpdateProductExecute(model,id);
+        }
+
+        public static void Delete(int id)
+        {
+            ProductDa.DeleteProduct(id);
+        }
     }
 }

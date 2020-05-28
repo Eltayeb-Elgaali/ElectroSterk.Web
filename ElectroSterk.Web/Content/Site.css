@@ -22,3 +22,21 @@ table.table-sort.categories td {
 .msg-category-change {
     position: absolute; 
 }
+
+span.loader {
+    display: none;
+}
+
+span.ajax-msg {
+    background: green;
+    color: white;
+    padding: 10px;
+    display: none;
+    position: absolute;
+    bottom: 0;
+}
+
+.ajaxcart {
+    position: relative;
+    top: 5px;
+}

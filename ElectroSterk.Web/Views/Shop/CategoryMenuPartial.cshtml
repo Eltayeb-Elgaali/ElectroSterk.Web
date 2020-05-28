@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Entities.Category>
+
+
+<h3>Categories</h3>
+<ul>
+    @foreach (var item in Model)
+    {
+        <li><a href="/shop/category/@item.Name.ToLower()">@item.Name</a></li>
+    }
+</ul>
+
+
+
