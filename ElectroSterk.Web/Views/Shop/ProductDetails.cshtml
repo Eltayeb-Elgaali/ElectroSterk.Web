@@ -23,7 +23,7 @@
             <span class="loader">
                 <img src="~/Content/img/ajax-loader.gif"/>
             </span>
-            <span class="ajax-msg">The product has been to your cart.</span>
+            <span class="ajax-msg">The product has been added to your cart.</span>
         </div>
     </div>
 </div>
@@ -38,7 +38,7 @@
         @foreach (var image in Model.GalleryImages)
         {
             <div style="display: inline-block">
-                <a class="fancybox"href="/Images/Uploads/Products/@Model.Id/Gallery/@image">
+                <a class="fancybox"  rel="Gallery1" href="/Images/Uploads/Products/@Model.Id/Gallery/@image">
                     <img src="/Images/Uploads/Products/@Model.Id/Gallery/Thumbs/@image"/>
                 </a>
             </div>
@@ -61,7 +61,7 @@ $(function() {
     $("a.add-to-cart").click(function(e) {
         e.preventDefault();
 
-        $("spad.loader").addClass("inline-block");
+        $("span.loader").addClass("in-bl");
 
         var url = "/cart/AddToCartPartial";
 
@@ -70,11 +70,11 @@ $(function() {
             function(data) {
                 $(".ajaxcart").html(data);
             }).done(function() {
-            $("span.loader").removeClass("inline-block");
-            $("span.ajax-msg").addClass("inline-block");
+            $("span.loader").removeClass("in-bl");
+            $("span.ajax-msg").addClass("in-bl");
             setTimeout(function() {
                     $("span.ajax-msg").fadeOut("fast");
-                    $("span.ajax-msg").removeClass("inline-block");
+                    $("span.ajax-msg").removeClass("in-bl");
                 },
                 2000);
         });

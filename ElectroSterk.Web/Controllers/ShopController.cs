@@ -9,9 +9,11 @@ using Entities;
 
 namespace ElectroSterk.Web.Controllers
 {
+    
     public class ShopController : Controller
     {
         // GET: Shop
+        
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Pages");

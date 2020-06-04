@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Cart.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="OrderDetails.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

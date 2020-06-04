@@ -7,7 +7,7 @@
 <h2>Pages</h2>
 
 <p>
-    @Html.ActionLink("Nieuwe pagina toevoegen", "AadPage")
+    @Html.ActionLink("Add new page", "AadPage")
 </p>
 
 @if (!Model.Any())
@@ -80,8 +80,8 @@ else
                 placeholder: "ui-state-highlight",
                 update: function() {
                     var ids = $("table#pages tbody").sortable("serialize");
-                    //console.log(ids);
-                    var url = "Admin/Pages/ReorderPages";
+                    console.log(ids);
+                    var url = "/Admin/Pages/ReorderPages";
                     //ajax call
                     $.post(url, ids, function(data) {
                     });

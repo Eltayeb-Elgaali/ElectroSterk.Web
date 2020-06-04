@@ -13,6 +13,7 @@ using PagedList;
 
 namespace ElectroSterk.Web.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ShopController : Controller
     {
         // GET: Admin/Shop
@@ -318,7 +319,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
                 if (file != null && file.ContentLength > 0)
                 {
                     var baseDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
-                    string tempPath1 = Path.Combine(baseDirectory.ToString(),
+                    string tempPath1 = Path.Combine(baseDirectory.ToString(), 
                         "Products\\" + id.ToString() + "\\Gallery");
                     string tempPath2 = Path.Combine(baseDirectory.ToString(),
                         "Products\\" + id.ToString() + "\\Gallery\\Thumbs");

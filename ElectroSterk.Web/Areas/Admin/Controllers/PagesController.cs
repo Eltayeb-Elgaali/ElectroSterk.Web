@@ -6,6 +6,7 @@ using Entities;
 
 namespace ElectroSterk.Web.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PagesController : Controller
     {
         // GET: Admin/Pages
@@ -28,17 +29,25 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
                 return View(model);
             }
 
-            var page = new Page()
+            using (var db = new ElectroSterkDbContext())
             {
-                Title = model.Title,
-                Body = model.Body,
-                HasSidbar = model.HasSidbar,
-                Sorting = 100
-            };
+                var page = new Page();
+                page.Title = model.Title;
+                if (db.Pages.Any(x => x.Title == model.Title))
+                {
+                    ModelState.AddModelError("", "This title is already exist") ;
+                    return View(model);
+                }
 
 
-            Pages.AddPage(page);
-            return RedirectToAction("Index");
+                page.Body = model.Title;
+                page.HasSidbar = model.HasSidbar;
+                page.Sorting = 100;
+                Pages.AddPage(page);
+            }
+
+            TempData["SM"] = "You have added a new page";
+            return RedirectToAction("AadPage");
         }
 
         
@@ -47,7 +56,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
             var page = Pages.Get(id);
             if (page == null)
             {
-                return Content("De pagina bestaat niet");
+                return Content("This page is not exist");
             }
 
             return View(page);
@@ -114,7 +123,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
                 foreach (var pageId in id)
                 {
                     page = db.Pages.Find(pageId);
-                    page.Sorting = count;
+                    page.Sorting = count; 
                     db.SaveChanges();
                     count++;
                 }

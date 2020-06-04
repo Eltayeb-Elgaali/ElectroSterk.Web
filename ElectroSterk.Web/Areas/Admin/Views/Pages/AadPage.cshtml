@@ -6,6 +6,13 @@
 
 <h2>Aad Page</h2>
 
+@if (TempData["SM"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -50,7 +57,7 @@
 }
 
 <div>
-    @Html.ActionLink("Terug naar lijst", "Index")
+    @Html.ActionLink("Back to pages", "Index")
 </div>
 
 @section Scripts{

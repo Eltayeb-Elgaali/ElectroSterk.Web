@@ -60,8 +60,8 @@ else
                 </td>
 
                 <td>
-                    <a href="#" class="increment-product" data-id="@item.ProductId">+</a>
-                    <a href="#" class="decrement-product" data-id="@item.ProductId">-</a>
+                    <a href="#" class="increment-product" data-id="@item.ProductId">+</a> <br/><br />
+                    <a href="#" class="decrement-product" data-id="@item.ProductId">-</a>  <br /><br />
                     <a href="#" class="remove-product" data-id="@item.ProductId">Remove</a>
                 </td>
                 <td class="total@(item.ProductId)">
@@ -90,12 +90,12 @@ else
 $(function () {
 
     /////////
-    $("a.decrement-product").click(function (e) {
+    $("a.increment-product").click(function (e) {
         e.preventDefault();
 
         var $this = $(this);
         var productId = $(this).data("id");
-        var url = "/cart/DecrementProduct";
+        var url = "/cart/IncrementProduct";
 
         $.getJSON(url,
             { productId: productId },
@@ -115,7 +115,7 @@ $(function () {
                     $("td.total" + productId).html(priceHtml);
 
                     var gt = parseFloat($("td.grandtotal span").text()); 
-                    var grandtotal = (gt - data.price).toFixed(2);
+                    var grandtotal = (gt + data.price).toFixed(2);
 
                     $("td.grandtotal span").text(grandtotal);
                 }
@@ -130,7 +130,7 @@ $("a.decrement-product").click(function (e) {
     e.preventDefault();
 
     var productId = $(this).data("id");
-    var url = "/cart/IncrementProduct";
+    var url = "/cart/DecrementProduct";
 
     $.getJSON(url,
         { productId: productId },
@@ -141,8 +141,8 @@ $("a.decrement-product").click(function (e) {
 
             $("td.total" + productId).html(priceHtml);
 
-            var gt = parseFloat($("td.grandtotal span").text())
-            var grandtotal = (gt + data.price).toFixed(2);
+            var gt = parseFloat($("td.grandtotal span").text());
+            var grandtotal = (gt - data.price).toFixed(2);
 
             $("td.grandtotal span").text(grandtotal);
         });

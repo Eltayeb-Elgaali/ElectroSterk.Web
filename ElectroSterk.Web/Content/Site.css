@@ -25,6 +25,7 @@ table.table-sort.categories td {
 
 span.loader {
     display: none;
+    
 }
 
 span.ajax-msg {
@@ -34,9 +35,14 @@ span.ajax-msg {
     display: none;
     position: absolute;
     bottom: 0;
+    margin-left: .90em;
 }
 
 .ajaxcart {
     position: relative;
     top: 5px;
+}
+
+.in-bl {
+    display: inline-block !important;
 }

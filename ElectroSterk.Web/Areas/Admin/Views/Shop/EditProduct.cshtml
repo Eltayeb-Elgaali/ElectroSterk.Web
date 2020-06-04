@@ -90,12 +90,12 @@
 }
 <hr />
 
-@if (!Model.GalleryImages.Any())
+@if (! Model.GalleryImages.Any())
 {
     <h3>There are no gallery images </h3>
 }
 
-<form action="/admin/shop/SaveGalleryImages" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+<form action="/admin/shop/SaveGalleryImages?id=@Model.Id" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
     <div class="fallback">
         <input type="file" name="file" multiple />
         <input type="submit" value="Upload" />
@@ -120,11 +120,11 @@
 @section Scripts {
     <script src="~/Scripts/dropzone/dropzone.js"></script>
 <script>
-    // Show the pic
+    
     $(function () {
 
 
-
+        // Show the pic
         function readURL(input) {
 
             if (input.files && input.files[0]) {
@@ -146,39 +146,37 @@
             readURL(this);
         });
 
-    Dropzone.options.dropzoneForm = {
-        acceptedFiles: "image/*",
-        init: function() {
-            this.on("complete",
-                function(file) {
+        //dropzone
+
+        Dropzone.options.dropzoneForm = {
+            acceptedFiles: "image/*",
+            init: function () {
+                this.on("complete", function (file) {
                     if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                         location.reload();
                     }
                 });
-             this.on("sending",
-                 function(file, xhr, formData) {
-                    formData.append("id", @Model.Id);
-                 });
             }
         };
 
-
         ////////////////////////////delete
+
         $("a.deleteimage").click(function (e) {
             e.preventDefault();
 
-            if (!confirm("are you sure you want to delete")) return false;
+            if (!confirm("are you sure you want to delete this image")) return false;
 
             var $this = $(this);
             var url = "/admin/shop/DeleteImage";
             var imageName = $this.data("name");
 
-            $post(url,
+            $.post(url,
                 { id: @Model.Id, imageName: imageName },
                 function(data) {
                     $this.parent().fadeOut("fast");
                 });
         });
+        //////////////
 
     });
 

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.UI.WebControls.WebParts;
 
 namespace ElectroSterk.Web
 {
@@ -14,6 +9,12 @@ namespace ElectroSterk.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+
+            routes.MapRoute("Manage", "Manage/{action}/{id}", new { controller = "Manage", id = UrlParameter.Optional },
+                new[] { "ElectroSterk.Web.Controllers" });
+
+            routes.MapRoute("Account", "Account/{action}/{id}", new { controller = "Account", id = UrlParameter.Optional },
+                new[] { "ElectroSterk.Web.Controllers" });
 
             routes.MapRoute("Cart", "Cart/{action}/{id}", new { controller = "Cart", action = "Index", id = UrlParameter.Optional },
                 new[] { "ElectroSterk.Web.Controllers" });
