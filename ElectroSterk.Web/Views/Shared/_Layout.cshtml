@@ -25,7 +25,7 @@
                 </ul>
                 @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                 {
-                    <ul class="navbar-collapse collapse navbar-right">
+                    <ul class="adminarea navbar-collapse collapse navbar-right">
                         <li>@Html.ActionLink("Admin Area", "Index","Dashboard", new {area = "Admin"},null)</li>
                     </ul>
                 }
@@ -45,10 +45,36 @@
     </div>
     <div class="container body-content">
         <div class="row">
-            
-            <div class="col-xs-12 col-md-12">
-                @Html.Action("CategoryMenuPartial", "Shop")
-            </div>
+            <div class="ajaxbg"><span><img src="~/Content/img/ajax-loader.gif" /></span></div>
+
+            @if (ViewBag.Title != "Register" &&
+                 ViewBag.Title != "Log in" &&
+                 ViewBag.Title != "Manage" &&
+                 ViewBag.Title != "Orders")
+
+            {
+                <div class="col-xs-12 col-md-2">
+                    @Html.Action("CategoryMenuPartial", "Shop")
+                </div>
+            }
+
+            @if (ViewBag.Title == "Manage")
+            {
+                <div class="col-xs-12 col-md-2">
+                    <ul>
+                        <li><a href="/account/orders">Mijn bestellingen</a></li>
+                    </ul>
+                </div>
+            }
+
+            @if (ViewBag.Title == "Orders")
+            {
+                <div class="col-xs-12 col-md-2">
+                    <ul>
+                        <li><a href="/Manage/Index">Mijn account</a></li>
+                    </ul>
+                </div>
+            }
 
             @if (ViewBag.Sidebar == "Yes")
             {
@@ -69,7 +95,7 @@
         
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - ElectroSterk</p>
         </footer>
     </div>
 

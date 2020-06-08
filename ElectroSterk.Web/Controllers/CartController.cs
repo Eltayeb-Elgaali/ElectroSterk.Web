@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web.Mvc;
 using System.Xml.Schema;
 using DA;
+using ElectroSterk.Web.Models;
 using Entities;
 
 namespace ElectroSterk.Web.Controllers
@@ -152,6 +156,61 @@ namespace ElectroSterk.Web.Controllers
 
                 cart.Remove(model);
             }
+        }
+
+        public ActionResult PaypalPartial()
+        {
+            List<Cart> cart = Session["cart"] as List<Cart>;
+
+            return PartialView(cart);
+        }
+
+        public void PlaceOrder()
+        {
+            List<Cart> cart = Session["cart"] as List<Cart>;
+
+            string username = User.Identity.Name;
+
+            int orderId = 0;
+
+            using (var db = new ElectroSterkDbContext())
+            {
+                Order order = new Order();
+                var user = db.OrderUsers.FirstOrDefault(x => x.UserName == username);
+                int userId = user.Id;
+                order.UserId = userId;
+                order.CreatedOn = DateTime.Now;
+
+                db.Orders.Add(order);
+                db.SaveChanges();
+
+                orderId = order.OrderId;
+
+                OrderDetails orderDetails = new OrderDetails();
+
+                foreach (var item in cart)
+                {
+                    orderDetails.OrderId = orderId;
+                    orderDetails.UserId = userId;
+                    orderDetails.ProductId = item.ProductId;
+                    orderDetails.Quantity = item.Quantity;
+
+                    db.OrderDetails.Add(orderDetails);
+
+                    db.SaveChanges();
+                }
+
+            }
+
+            //email 
+            //var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            //{
+            //    Credentials = new NetworkCredential("d0a13fae182e56", "759256fa7de8e5"),
+            //    EnableSsl = true
+            //};
+            //client.Send("admin@example.com", "admin@example.com", "New Order", "You have a new order . order number is " + orderId);
+
+            Session["cart"] = null;
         }
     }
 }

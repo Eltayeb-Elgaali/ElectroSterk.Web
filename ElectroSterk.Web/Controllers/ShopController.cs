@@ -36,6 +36,7 @@ namespace ElectroSterk.Web.Controllers
 
             using (var db = new ElectroSterkDbContext())
             {
+                
                 Category category = db.Categories.Where(x => x.Name == name).FirstOrDefault();
                 int catId = category.Id;
 

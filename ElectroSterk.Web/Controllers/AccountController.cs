@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DA;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ElectroSterk.Web.Models;
+using Entities;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ElectroSterk.Web.Controllers
@@ -152,20 +155,43 @@ namespace ElectroSterk.Web.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
+                
                 if (ModelState.IsValid)
                 {
                     var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                     var result = await UserManager.CreateAsync(user, model.Password);
 
                     /////
-                    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
 
-                    var userStore = new UserStore<ApplicationUser>(db);
-                    var userManager = new UserManager<ApplicationUser>(userStore);
-                    userManager.AddToRole(user.Id, "User");
+                    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));   // --------------------------@T-------------------------
+
+                    var userStore = new UserStore<ApplicationUser, CustomRole, int,
+                        CustomUserLogin, CustomUserRole, CustomUserClaim>(db);
+                    var userManager = new UserManager<ApplicationUser,int>(userStore);
+                    if (user.Id != 0)
+                    {
+                        userManager.AddToRole(user.Id, "User");
+                    }
+                    
+                    
+
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        using (var electroSterkDb = new ElectroSterkDbContext())
+                        {
+
+                            var orderUser = new OrderUser()
+                            {
+                                Id = user.Id,
+                                UserName = user.UserName, 
+                                Email = user.Email,
+
+                            };
+                            electroSterkDb.OrderUsers.Add(orderUser);
+                            electroSterkDb.SaveChanges();
+                        }
 
                         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
@@ -187,9 +213,9 @@ namespace ElectroSterk.Web.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        public async Task<ActionResult> ConfirmEmail(int userId, string code)
         {
-            if (userId == null || code == null)
+            if (userId == default(int) || code == null)
             {
                 return View("Error");
             }
@@ -300,7 +326,7 @@ namespace ElectroSterk.Web.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId == default(int))
             {
                 return View("Error");
             }
@@ -493,5 +519,53 @@ namespace ElectroSterk.Web.Controllers
             }
         }
         #endregion
+
+
+        // GET: /account/Orders
+        [Authorize(Roles = "User")]
+        public ActionResult Orders()
+        {
+            List<OrdersForUser> ordersForUser = new List<OrdersForUser>();
+
+            using (var db = new ElectroSterkDbContext())
+            {
+                var user = db.OrderUsers.Where(x => x.UserName == User.Identity.Name).FirstOrDefault();
+                int userId = user.Id;
+
+                List<Order> orders = db.Orders.Where(x => x.UserId == userId).ToList();
+
+                foreach (var order in orders)
+                {
+                    Dictionary<string, int> productsAndQuantity = new Dictionary<string, int>();
+                    decimal total = 0m;
+                    List<OrderDetails> orderDetailsList = db.OrderDetails.Where(x => x.OrderId == order.OrderId).ToList();
+
+                    foreach (var orderDetails in orderDetailsList)
+                    {
+                        var product = db.Products.Where(x => x.Id == orderDetails.ProductId).FirstOrDefault();
+
+                        decimal price = product.Price;
+
+                        string productName = product.Name;
+
+                        productsAndQuantity.Add(productName, orderDetails.Quantity);
+
+                        total += orderDetails.Quantity * price;
+                    }
+
+                    ordersForUser.Add(new OrdersForUser()
+                    {
+                        OrderNumber = order.OrderId,
+                        Total = total,
+                        ProductsAndQuantity = productsAndQuantity,
+                        CreatedOn = order.CreatedOn
+                    });
+                }
+            }
+
+            return View(ordersForUser);
+        }
+        
+
     }
 }

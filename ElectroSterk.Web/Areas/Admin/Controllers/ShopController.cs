@@ -8,6 +8,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using BLL;
 using DA;
+using ElectroSterk.Web.Areas.Admin.Data.Shop;
 using Entities;
 using PagedList;
 
@@ -16,13 +17,15 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class ShopController : Controller
     {
-        // GET: Admin/Shop
+        // GET: Admin/Shop/Categories
         public ActionResult Categories()
         {
             
             return View(CategoriesBll.Get());
         }
 
+
+        // POST: Admin/Shop/AddNewCategory
         [HttpPost]
         public string AddNewCategory(string catName)
         {
@@ -346,6 +349,49 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
 
             if (System.IO.File.Exists(path2))
                 System.IO.File.Delete(path2);
+        }
+
+        public ActionResult Orders()
+        {
+            List<OrdersForAdmin> ordersForAdmin = new List<OrdersForAdmin>();
+
+            using (var db = new ElectroSterkDbContext())
+            {
+                List<Order> orders = db.Orders.ToList();
+
+                foreach (var order in orders)
+                {
+                    Dictionary<string, int> productsAndQuantity = new Dictionary<string, int>();
+
+                    decimal total = 0m;
+
+                    List<OrderDetails> orderDetailsList =
+                        db.OrderDetails.Where(x => x.OrderId == order.OrderId).ToList();
+
+                    OrderUser user = db.OrderUsers.Where(x => x.Id == order.UserId).FirstOrDefault();
+                    string username = user.UserName;
+
+                    foreach (var orderDetails in orderDetailsList)
+                    {
+                        Product product = db.Products.Where(x => x.Id == orderDetails.ProductId).FirstOrDefault();
+
+                        decimal price = product.Price;
+                        string productName = product.Name;
+                        productsAndQuantity.Add(productName, orderDetails.Quantity);
+                        total += orderDetails.Quantity * price;
+                    }
+
+                    ordersForAdmin.Add(new OrdersForAdmin()
+                    {
+                        OrderNumber = order.OrderId,
+                        UserName = username,
+                        Total = total,
+                        ProductsAndQuantity = productsAndQuantity,
+                        CreatedOn = order.CreatedOn
+                    });
+                }
+            }
+            return View(ordersForAdmin);
         }
     }
 }

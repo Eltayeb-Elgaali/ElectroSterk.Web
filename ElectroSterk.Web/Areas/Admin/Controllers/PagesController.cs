@@ -16,11 +16,14 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
             return View(Pages.AllPages());
         }
 
+        // GET: Admin/Pages/AadPage
         public ActionResult AadPage()
         {
             return View();
         }
 
+
+        // POST: Admin/Pages/AadPage
         [HttpPost]
         public ActionResult AadPage(Page model)
         {
