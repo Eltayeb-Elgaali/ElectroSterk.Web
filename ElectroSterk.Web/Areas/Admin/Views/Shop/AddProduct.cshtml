@@ -4,7 +4,7 @@
     ViewBag.Title = "AddProduct";
 }
 
-<h2>AddProduct</h2>
+<h2>Een product toevoegen</h2>
 
 @if (TempData["msg"] != null)
 {
@@ -66,14 +66,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Add Product" class="btn btn-default" />
+                <input type="submit" value="Product toevoegen" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to Products", "Products")
+    @Html.ActionLink("Terug naar producten", "Products")
 </div>
 
 

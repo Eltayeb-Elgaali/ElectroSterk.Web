@@ -203,12 +203,12 @@ namespace ElectroSterk.Web.Controllers
             }
 
             //email 
-            //var client = new SmtpClient("smtp.mailtrap.io", 2525)
-            //{
-            //    Credentials = new NetworkCredential("d0a13fae182e56", "759256fa7de8e5"),
-            //    EnableSsl = true
-            //};
-            //client.Send("admin@example.com", "admin@example.com", "New Order", "You have a new order . order number is " + orderId);
+            var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("d0a13fae182e56", "759256fa7de8e5"),
+                EnableSsl = true
+            };
+            client.Send("admin@example.com", "admin@example.com", "New Order", "You have a new order . order number is " + orderId);
 
             Session["cart"] = null;
         }

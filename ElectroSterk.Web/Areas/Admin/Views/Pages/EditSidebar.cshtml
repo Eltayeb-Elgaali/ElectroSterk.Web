@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit Sidebar";
 }
 
-<h2 style="margin-top: 20px;">Edit Sidebar</h2>
+<h2 style="margin-top: 20px;">Zijbalk Bewerken</h2>
 
 @if (TempData["SM"] != null)
 {
@@ -25,7 +25,7 @@
 
     <div class="form-group">
         
-        <label class="control-label col-md-2" for="HasSidbar">Sidebar</label>
+        <label class="control-label col-md-2" for="HasSidbar">Zijbalk</label>
         <div class="col-md-10">
             @Html.TextAreaFor(model => model.Body, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
@@ -34,7 +34,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Edit" class="btn btn-default" />
+                <input style="color: #000000;" type="submit" value="Bewerken" class="btn btn-warning" />
             </div>
         </div>
     </div>

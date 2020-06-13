@@ -18,6 +18,7 @@ namespace DA
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<OrderUser> OrderUsers { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
 
     }

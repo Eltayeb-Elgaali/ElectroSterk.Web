@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-default">
+    <div class="navbar  navbar-default">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -17,19 +17,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/Admin/Dashboard" class="navbar-brand">Dashboard</a>
+                <a href="/" class="navbar-brand " target="_blank"> <img id="logo" src="~/Content/img/logo.png" /> </a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="/admin/pages">Pages</a></li>
-                    <li><a href="/admin/pages/EditSidebar">Sidebar</a></li>
-                    <li><a href="/admin/Shop/Categories">Categories</a></li>
-                    <li><a href="/admin/Shop/Products">Product</a></li>
-                    <li><a href="/admin/Shop/Orders">Orders</a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li> <a href="/" class="navbar-brand" target="_blank"> <img src="~/Content/img/logo.png"/> </a> </li>
+                <ul id="admin-area-links" class="nav navbar-nav navbar-right">
+                    <li><a class="active" href="/admin/pages">Pagina's</a></li>
+                    <li><a href="/admin/pages/EditSidebar">Zijbalken</a></li>
+                    <li><a href="/admin/Shop/Categories">Categorieën</a></li>
+                    <li><a href="/admin/Shop/Products">Producten</a></li>
+                    <li><a href="/admin/Shop/Orders">Bestellingen</a></li>
+                    <li><a href="/Admin/Dashboard">Dashboard</a></li>
                 </ul>
 
             </div>

@@ -1,0 +1,49 @@
+﻿@model Entities.Review
+
+@using (Html.BeginForm("SendReview", "Shop", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>Rating</td>
+            <td>
+                <div id="rateYo"></div>
+                <input type="hidden" id="rating" name="rating" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>Content</td>
+            <td>@Html.TextAreaFor(model => model.Content, new { cols = 20, rows = 5 })</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input type="submit" value="Send" />
+                @Html.HiddenFor(model => model.ProductId)
+            </td>
+        </tr>
+    </table>
+}
+
+
+@*<link href="~/Content/jquery.rateyo.min.css" rel="stylesheet" />
+    @section Scripts {
+        <script src="~/Scripts/jquery.min.js"></script>
+        <script src="~/Scripts/jquery.rateyo.min.js"></script>
+        <script>
+
+            $(function () {
+
+                $("#rateYo").rateYo({
+                    rating: 0,
+                    numStars: 5,
+                    maxValue: 5,
+                    halfStar: true
+                });
+                console.log("hi");
+            });
+
+        </script>
+
+    }*@
+

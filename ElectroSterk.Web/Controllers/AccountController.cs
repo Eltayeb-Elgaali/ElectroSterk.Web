@@ -83,6 +83,7 @@ namespace ElectroSterk.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    Session["username"] = model.Email;
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

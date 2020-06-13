@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using DA;
 using Entities;
@@ -14,7 +12,7 @@ namespace ElectroSterk.Web.Controllers
         public ActionResult Index(string page = "")
         {
             if (page == "")
-                page = "home";
+                page = "Home";
             Page modelPage ;
 
             using (var db = new ElectroSterkDbContext())
@@ -51,7 +49,7 @@ namespace ElectroSterk.Web.Controllers
             List<Page> pageList;
             using (var db = new ElectroSterkDbContext())
             {
-                pageList = db.Pages.ToArray().OrderBy(x => x.Sorting).Where(x => x.Title != "home").ToList();
+                pageList = db.Pages.ToArray().OrderBy(x => x.Sorting).Where(x => x.Title != "Home").ToList();
             }
 
             return PartialView(pageList);
@@ -67,6 +65,11 @@ namespace ElectroSterk.Web.Controllers
             }
 
             return PartialView(sidebar);
+        }
+
+        public ActionResult HomePagePartial()
+        {
+            return PartialView();
         }
     }
 }

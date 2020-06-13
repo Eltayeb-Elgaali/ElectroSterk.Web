@@ -9,7 +9,7 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-default">
+    <div class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/" class="navbar-brand">ElectroSterk</a>
+                <a href="/" class="navbar-brand "> <img id="logo" src="~/Content/img/logo.png" /> </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -31,7 +31,7 @@
                 }
                 else
                 {
-                    if ((ViewBag.Title != "Cart Details"))
+                    if ((ViewBag.Title != "Cart Details") && Request.IsAuthenticated && User.IsInRole("User"))
                     {
                         <ul class="navbar-collapse collapse navbar-right">
                             @Html.Action("CartPartial", "Cart")
@@ -55,6 +55,13 @@
             {
                 <div class="col-xs-12 col-md-2">
                     @Html.Action("CategoryMenuPartial", "Shop")
+                </div>
+            }
+
+            @if (ViewBag.Title == "Home")
+            {
+                <div class="col-xs-12 col-md-10">
+                    @Html.Action("HomePagePartial", "Pages")
                 </div>
             }
 
@@ -92,10 +99,50 @@
                 </div>
             }
         </div>
-        
+
+        <hr />
+        <div class="row">
+            <div class="col-xs-12 col-md-4 div-footer">
+                <div class="">
+                    <h4>Hulp nodig?</h4>
+                    <ul class="ul-footer">
+                        <li><a href="#">Hulp & vragen</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Terugsturen & Omruilen</a></li>
+                        <li><a href="#">Voorwaarden</a></li>
+                        <li><a href="#">Afhalen</a></li>
+                        <li><a href="#">Levering</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 div-footer">
+                <div class="">
+                    <h4>Electrosterk</h4>
+                    <ul class="ul-footer">
+                        <li><a href="#">Wie zijn wij?</a></li>
+                        <li><a href="#">Privacybeleid</a></li>
+                        <li><a href="#">Zakelijk</a></li>
+                        <li><a href="#">Winkels</a></li>
+                        <li><a href="#">Pers</a></li>
+                        <li><a href="#">Jobs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 div-footer">
+                <div class="">
+                    <h4>Volg ons</h4>
+                </div>
+                <div>
+                    <h4>Download ons</h4>
+                    <img src="~/Content/img/app-store.png" /> <br /> <br />
+                    <img src="~/Content/img/google-play.png" />
+                </div>
+            </div>
+        </div>
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - ElectroSterk</p>
+            <p><img src="~/Content/img/home-images/payments-card.JPG" style="width: 100%;" /></p>
+            <p class="text-center">&copy; @DateTime.Now.Year - ElectroSterk</p>
         </footer>
     </div>
 

@@ -1,4 +1,9 @@
-﻿table.table-sort tr:not(.home) {
+﻿/*body {
+    background: #FFFFFF;
+    
+}*/
+
+table.table-sort tr:not(.home) {
     cursor: pointer;
 }
 
@@ -6,9 +11,11 @@
     border: 1px dashed  #4F282D;
 }
 
-.div.new-category {
-    margin-top: 30px;
+div.new-category {
+    margin-top: 40px;
+    margin-bottom: 30px;
     position: relative;
+
 }
 
 span.ajax-photo {
@@ -74,4 +81,91 @@ form.paypalform {
 
 .row {
     position: relative;
+}
+
+#logo {
+    height: 50px;
+    border-radius: 10px;
+}
+
+.navbar-brand {
+    padding: 0;
+}
+
+
+.navbar-default .navbar-nav > li > a {
+    color: #4f282d;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+
+    .navbar-default .navbar-nav > li > a:hover {
+        color: goldenrod;
+    }
+
+.navbar-default .navbar-nav {
+    color: #FFFFFF;
+}
+
+h2 {
+    color: #000000;
+}
+
+.table-product .description {
+    
+    max-width: 10em;
+}
+
+.table-product tr:nth-child(odd){
+
+    background-color: #f2f2f2;
+}
+
+
+.table-order tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.links {
+    color: #000000;
+    font-weight: bolder;
+}
+
+.links:hover {
+    color: goldenrod;
+}
+
+.ul-footer {
+    list-style: none;
+}
+.ul-footer li a {
+    color: #000000;
+    font-weight: bolder;
+}
+
+.ul-footer li a:hover{
+    color: goldenrod;
+}
+
+.div-footer h4 {
+    margin-left: 2.2em;
+    color: goldenrod;
+}
+
+.list-group-mine .list-group-item {
+    background-color: #FFFFFF;
+    border-top: 1px solid goldenrod;
+    /*border-left-color: #fff;
+    border-right-color: #fff;*/
+    text-decoration: none;
+}
+
+.list-group-mine .list-group-item:hover {
+    background-color: goldenrod;
+}
+
+
+.list-group-item a {
+    color: #000000;
 }

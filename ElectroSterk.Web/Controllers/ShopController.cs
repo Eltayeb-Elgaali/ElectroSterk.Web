@@ -73,5 +73,40 @@ namespace ElectroSterk.Web.Controllers
 
             return View("ProductDetails", product);
         }
+
+
+        // let signed in client to Review product
+        public ActionResult ReviewPartial(int id)
+        {
+            var review = new Review();
+            using (var db = new ElectroSterkDbContext())
+            {
+                var product = db.Products.Find(id);
+                ViewBag.product = product;
+
+                review.ProductId = product.Id;
+
+            }
+
+
+            return PartialView(review);
+        }
+
+        public ActionResult ShowReviewPartial(int id)
+        {
+            List<Review> productReviewList;
+
+            using (var db = new ElectroSterkDbContext())
+            {
+
+                Product product = db.Products.Where(x => x.Id == id).FirstOrDefault();
+                int productId = product.Id;
+
+                productReviewList = db.Reviews.ToArray().Where(x => x.ProductId == productId).ToList();
+
+            }
+
+            return PartialView(productReviewList);
+        }
     }
 }

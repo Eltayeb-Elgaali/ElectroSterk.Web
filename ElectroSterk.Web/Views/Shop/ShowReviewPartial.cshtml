@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Entities.Review>
+
+<link href="~/Content/jquery.rateyo.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery.min.js"></script>
+<script src="~/Scripts/jquery.rateyo.min.js"></script>
+<table class="table">
+
+
+
+    @{ int i = 1;}
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderUserId)
+                <br />
+                <script>
+                    $(function () {
+
+                        $("#@("rating" + i)").rateYo({
+                            rating: @item.Rating
+                        });
+                    });
+                </script>
+                <div id="@("rating" + i)"></div>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+
+        </tr>
+        i++;
+    }
+
+</table>

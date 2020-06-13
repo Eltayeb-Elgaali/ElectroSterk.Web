@@ -22,8 +22,12 @@ namespace ElectroSterk.Web
                 new[] { "ElectroSterk.Web.Controllers" });
             routes.MapRoute("SidebarPartial", "Pages/SidebarPartial", new { controller = "Pages", action = "SidebarPartial" },
                 new[] { "ElectroSterk.Web.Controllers" });
+
+            routes.MapRoute("HomePagePartial", "Pages/HomePagePartial", new { controller = "Pages", action = "HomePagePartial" },
+                new[] { "ElectroSterk.Web.Controllers" });
             routes.MapRoute("PagesMenuPartial", "Pages/PagesMenuPartial", new { controller = "Pages", action = "PagesMenuPartial" },
                 new[] { "ElectroSterk.Web.Controllers" });
+
             routes.MapRoute("Pages", "{page}", new { controller = "Pages", action = "Index" },
                 new[] { "ElectroSterk.Web.Controllers" });
             routes.MapRoute("Default", "", new {controller = "Pages", action = "Index"},

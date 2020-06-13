@@ -38,7 +38,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
                 page.Title = model.Title;
                 if (db.Pages.Any(x => x.Title == model.Title))
                 {
-                    ModelState.AddModelError("", "This title is already exist") ;
+                    ModelState.AddModelError("", "Deze Titel bestaat al") ;
                     return View(model);
                 }
 
@@ -49,11 +49,11 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
                 Pages.AddPage(page);
             }
 
-            TempData["SM"] = "You have added a new page";
+            TempData["SM"] = "U hebt een nieuwe pagina toegevoegd";
             return RedirectToAction("AadPage");
         }
 
-        
+        // GET: Admin/Pages/EditPage
         public ActionResult EditPage(int id)
         {
             var page = Pages.Get(id);
@@ -101,7 +101,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
             var page = Pages.Get(id);
             if (page == null)
             {
-                return Content("The Page does not exist");
+                return Content("De pagina bestaat niet");
             }
 
             return View(page);
@@ -145,7 +145,7 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
             sidebar.Body = model.Body;
             Sidebars.Update(sidebar);
 
-            TempData["SM"] = "You have edited the sidebar";
+            TempData["SM"] = "U hebt de zijbalk bewerkt";
             return RedirectToAction("EditSidebar");
 
         }

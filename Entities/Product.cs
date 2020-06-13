@@ -19,5 +19,13 @@ namespace Entities
         public virtual Category Category { get; set; }
         public virtual IEnumerable<SelectListItem> Categories { get; set; }
         public virtual IEnumerable<string> GalleryImages { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
+
+
+        public Product()
+        {
+            Reviews = new List<Review>();
+        }
     }
 }

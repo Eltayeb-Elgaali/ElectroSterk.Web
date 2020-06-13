@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -25,7 +24,6 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
         }
 
 
-        // POST: Admin/Shop/AddNewCategory
         [HttpPost]
         public string AddNewCategory(string catName)
         {
@@ -392,6 +390,24 @@ namespace ElectroSterk.Web.Areas.Admin.Controllers
                 }
             }
             return View(ordersForAdmin);
+        }
+
+        [HttpPost]
+        public ActionResult SendReview(Review review, double rating)
+        {
+
+
+            using (var db = new ElectroSterkDbContext())
+            {
+                string username = Session["username"].ToString();
+                review.PostDate = DateTime.Now;
+                review.OrderUserId = db.OrderUsers.Single(a => a.UserName.Equals(username)).Id;
+                review.Rating = rating;
+                db.Reviews.Add(review);
+                db.SaveChanges();
+
+            }
+            return RedirectToAction("product-details", "Shop", new { id = review.ProductId });
         }
     }
 }
